@@ -12,29 +12,40 @@
 
 </head>
 
+
+
 <body ng-app="bucketList" ng-controller="mainCtrl">
 	testing
 
-<form ng-submit="geocoder()"> <!--need to create function -->
+<!-- <form ng-submit="geocoder()"> need to create function
 	<input id="pac-input" class="controls" type="text" placeholder="Search Box" ng-model="inputLocation">
 	<button id="add-pac-input">Add to Bucket</button>
-</form>
+</form> -->
+
+<a ui-sref="map" ng-click="initMap()">map</a>
+
+<div ui-view></div>
 
 
-
-<div id="map"></div>
 
 	
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.2.1/angular-google-maps.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
 
 
 	<script src="js/app.js"></script>
-	<script src="js/mainCtrl.js"></script>
-	<script src="js/service.js"></script>
+	<script src="js/controllers/mainCtrl.js"></script>
+	<script src="js/services/mainService.js"></script>
+	<script src="js/controllers/mapCtrl.js"></script>
+	<script src="js/services/mapService.js"></script>
+	<script src="js/controllers/currentCtrl.js"></script>
+	<script src="js/services/currentService.js"></script>
+	<script src="js/controllers/completedCtrl.js"></script>
+	<script src="js/services/completedService.js"></script>
 	<script src=""></script>
 	<script src=""></script>
 	<script src=""></script>
