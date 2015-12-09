@@ -4,32 +4,37 @@
 	<meta charset="UTF-8">
 	<title>Bucket-List</title>
 	<link rel="stylesheet" href="styles.css" type="text/css">
-</head>
-<body ng-app="bucketList" ng-controller="mainCtrl">
-	testing
-
-<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-<button type="submit" id="add-pac-input">Add to Bucket</button>
-<div id="map"></div>
-
-
-
-
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.1/angular.js"></script>
 	<!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2pfXaIHGrYslOaI9UrAHhVDssr4PNvTo&libraries=places"
-         async defer></script>
+	 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2pfXaIHGrYslOaI9UrAHhVDssr4PNvTo&libraries=places"></script>
+  
 
+</head>
+
+<body ng-app="bucketList" ng-controller="mainCtrl">
+	testing
+
+<form ng-submit="geocoder()"> <!--need to create function -->
+	<input id="pac-input" class="controls" type="text" placeholder="Search Box" ng-model="inputLocation">
+	<button id="add-pac-input">Add to Bucket</button>
+</form>
+
+
+
+<div id="map"></div>
+
+	
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.2.1/angular-google-maps.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+
 
 	<script src="js/app.js"></script>
 	<script src="js/mainCtrl.js"></script>
-	<script src=""></script>
-	<script src=""></script>
+	<script src="js/service.js"></script>
 	<script src=""></script>
 	<script src=""></script>
 	<script src=""></script>
