@@ -18,7 +18,7 @@ app.get('/', function (res, req) {
 	})
 	.get('/map', MapController.getBuckets)
 	.post('/map', MapController.createBucket)
-	.patch('/map/:id', MapController.editBucket)
+	.put('/map/:id', MapController.editBucket)
 	.delete('/map/:id', MapController.deleteBucket);
 
 

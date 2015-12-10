@@ -7,24 +7,27 @@ angular.module('bucketList').service('mapService', function($http) {
 		})
 	};
 
-	this.initMap = function() {
-		return map = new google.maps.Map(document.getElementById('map'), {
+	var map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 2,
 			center: new google.maps.LatLng(30, 0),
 			mapTypeId: google.maps.MapTypeId.ROAD
 		});
+
+	this.initMap = function() {
+		return map;
 	};
 
-
 	this.populateBuckets = function (options) {
-		return google.maps.event.addDomListener(window, "load", function(e) {
-  		// console.log(e.latLng);
+		return map.addListener("tilesloaded", function(e) {
 	  	//(2) Create a marker normally.
 	    //Marker class accepts any properties even if it's not related with Marker.
 	    var marker = new google.maps.Marker({
-	    	position: options.coordinates || e.latLng,
+	    	position: options.coordinates,
 		    map: map,
-		    icon: '../corbeille_vide.png'
+		    icon: '../corbeille_vide.png',
+		    _id: options._id,
+		    description: options.description,
+		    flag: false,
 		  });
 	    
 	    //(3)Set a flag property which stands for the editing mode.
@@ -32,16 +35,20 @@ angular.module('bucketList').service('mapService', function($http) {
 	    
 	    //(4)Create a div element to display the HTML strings.
 	    var htmlBox = document.createElement("div");
-	    htmlBox.innerHTML = options.description || "";
+	    htmlBox.innerHTML =  marker.description || "";
 	    htmlBox.style.width = "200px";
 	    htmlBox.style.height = "50px";
 	    
 	    //(5)Create a textarea for edit the HTML strings.
-	    var textBox = document.createElement("textarea");
-	    textBox.innerText = options.description || "";
+	    var textBox = document.createElement("input");
+	    textBox.id = "text";
+	    textBox.textContent = marker.description || "";
 	    textBox.style.width = "200px";
 	    textBox.style.height = "50px";
 	    textBox.style.display = "none";
+	    // console.log("Textbox", textBox.textContent);
+	    // txt = textBox.textContent;
+	    
 	    
 	    //(6)Create a div element for container.
 	    var container = document.createElement("div");
@@ -73,26 +80,26 @@ angular.module('bucketList').service('mapService', function($http) {
 	    //the value can be change just negation.
 	    google.maps.event.addDomListener(editBtn, "click", function() {
 	      marker.set("editing", !marker.editing);
-	      
+
 	    });
 
+	    //update marker
 	    google.maps.event.addDomListener(saveBtn, "click", function () {
 	    	marker.set("editing", false);
-	    	var lat = marker.getPosition().lat();
-	    	var lng = marker.getPosition().lng();
-	    	console.log("lat: " + lat + " lng: " + lng);
 	    	return $http({
-	      	method: 'POST',
-	      	url: 'http://localhost:9001/map',
-	      	data: {
-	      		description: marker.html,
-	      		coordinates: {lat: lat, lng: lng}
-	      	},
+	      	method: 'PUT',
+	      	url: 'http://localhost:9001/map/' + marker._id,
+	      	data: {description: marker.html},
 	      });
 	    })
 
+	    //delete marker
 	    google.maps.event.addDomListener(deleteBtn, "click", function() {
 	    	marker.setMap(null);
+	    	return $http({
+	    		method: 'DELETE',
+	      	url: 'http://localhost:9001/map/' + marker._id,
+	    	})
 	    })
 	    
 	    //(11)A (property)_changed event occur when the property is changed.
@@ -111,7 +118,6 @@ angular.module('bucketList').service('mapService', function($http) {
      	marker.addListener('click', function() {
       	infoWnd.open(map, marker);
     	});
-    	console.log("marker", marker);
     });
   	google.maps.event.addDomListener(window, "load", initialize);
   };
@@ -126,8 +132,11 @@ angular.module('bucketList').service('mapService', function($http) {
 	    var marker = new google.maps.Marker({
 	    	position: options.coordinates || e.latLng,
 		    map: map,
-		    icon: '../corbeille_vide.png'
+		    icon: '../corbeille_vide.png',
+		    flag: true,
 		  });
+
+		
 	    
 	    //(3)Set a flag property which stands for the editing mode.
 	    marker.set("editing", false);
@@ -140,7 +149,7 @@ angular.module('bucketList').service('mapService', function($http) {
 	    
 	    //(5)Create a textarea for edit the HTML strings.
 	    var textBox = document.createElement("textarea");
-	    textBox.innerText = options.description || "";
+	    textBox.innerText = "";
 	    textBox.style.width = "200px";
 	    textBox.style.height = "50px";
 	    textBox.style.display = "none";
@@ -173,27 +182,40 @@ angular.module('bucketList').service('mapService', function($http) {
 
 	    //(10)Switch the mode. Since Boolean type for editing property,
 	    //the value can be change just negation.
+
+	    //the initial click event to create the marker already posts and an _id exists. Call a GET request for the _id for when the use clicks 'save'. POTENTIAL BUG IF USER CREATES MORE BUCKETS BEFORE CLICKING 'SAVE' due to being unable to accurately identify specific markers => added a flag property and an 'if' statement so that the request is only called the first time 'edit' is clicked.
 	    google.maps.event.addDomListener(editBtn, "click", function() {
 	      marker.set("editing", !marker.editing);
+	      if (marker.flag === true){
+	      	marker.flag = false;
+	      	return $http({
+	      		method: 'GET',
+	      		url: 'http://localhost:9001/map',
+	      	}).then(function(res) {
+	      		console.log(res.data);
+	      		var ident = res.data[res.data.length-1];
+	      		return marker._id = ident._id;
+	      	})
+	      };
+      	
 	    });
 
+	    //save marker
 	    google.maps.event.addDomListener(saveBtn, "click", function () {
 	    	marker.set("editing", false);
-	    	var lat = marker.getPosition().lat();
-	    	var lng = marker.getPosition().lng();
-	    	console.log("lat: " + lat + " lng: " + lng);
 	    	return $http({
-	      	method: 'POST',
-	      	url: 'http://localhost:9001/map',
-	      	data: {
-	      		description: marker.html,
-	      		coordinates: {lat: lat, lng: lng}
-	      	},
+	      	method: 'PUT',
+	      	url: 'http://localhost:9001/map/' + marker._id,
+	      	data: {description: marker.html},
 	      });
 	    })
 
 	    google.maps.event.addDomListener(deleteBtn, "click", function() {
 	    	marker.setMap(null);
+	    	return $http({
+	    		method: 'DELETE',
+	      	url: 'http://localhost:9001/map/' + marker._id,
+	    	})
 	    })
 	    
 	    //(11)A (property)_changed event occur when the property is changed.
@@ -212,9 +234,20 @@ angular.module('bucketList').service('mapService', function($http) {
      	marker.addListener('click', function() {
       	infoWnd.open(map, marker);
     	});
-    	console.log("marker", marker);
+
+    	console.log("marker created", marker);
+    	var lat = marker.getPosition().lat();
+	    var lng = marker.getPosition().lng();
+	    return $http({
+      	method: 'POST',
+      	url: 'http://localhost:9001/map',
+      	data: {
+      		description: options.description,
+      		coordinates: {lat: lat, lng: lng}
+      	},
+      });
     });
-  google.maps.event.addDomListener(window, "load", initialize);
+  	google.maps.event.addDomListener(window, "load", initialize);
   };
 	
 
