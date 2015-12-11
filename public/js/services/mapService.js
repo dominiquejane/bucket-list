@@ -218,15 +218,19 @@ angular.module('bucketList').service('mapService', function($http) {
 	    })
 
 	    google.maps.event.addDomListener(deleteBtn, "click", function() {
-	    	var x = marker._id;
-	    	marker.setMap(null);
-	    	return $http({
-	    		method: 'DELETE',
-	      	url: 'http://localhost:9001/map/' + x,
-	    	}).then(function(res) {
-	    		cb();	    		
-	    	})
-	    })
+	    	if (marker.flag === true){
+	      	alert("Edit and save bucket before deleting.")
+	      }
+	      else {
+	      	var x = marker._id;
+	    		marker.setMap(null);
+	    		return $http({
+			    		method: 'DELETE',
+			      	url: 'http://localhost:9001/map/' + x,
+			    	}).then(function(res) {
+			    		cb();	    		
+			    	})
+	      }});
 	    
 	    //(11)A (property)_changed event occur when the property is changed.
 	    google.maps.event.addListener(marker, "editing_changed", function(){
@@ -256,7 +260,7 @@ angular.module('bucketList').service('mapService', function($http) {
 	    		coordinates: {lat: lat, lng: lng},
 	    	},
 	    }).then(function(res) {
-	      	console.log("marker created", res.data);
+	      	console.log("marker created", res);
 	    	cb();
 	    });
 
