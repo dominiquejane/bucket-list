@@ -17,10 +17,17 @@ angular.module('bucketList').service('mapService', function($http) {
 		return map;
 	};
 
-	this.populateBuckets = function (options) {
-		return map.addListener("tilesloaded", function(e) {
-	  	//(2) Create a marker normally.
-	    //Marker class accepts any properties even if it's not related with Marker.
+	this.getLocations = function(marker) {
+		return $http({
+			method: 'GET',
+			url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + marker.coordinates.lat + "," + marker.coordinates.lng + "&key=AIzaSyBps_aa3xumXPu343xK55uiG9GK159m7Bo"
+		}).then(function(res){
+			var loc = res.data.results[res.data.results.length-2 || 0].formatted_address;
+			return loc;
+		})
+	}
+
+	this.populateBuckets = function (options, cb) {
 	    var marker = new google.maps.Marker({
 	    	position: options.coordinates,
 		    map: map,
@@ -45,10 +52,7 @@ angular.module('bucketList').service('mapService', function($http) {
 	    textBox.textContent = marker.description || "";
 	    textBox.style.width = "200px";
 	    textBox.style.height = "50px";
-	    textBox.style.display = "none";
-	    // console.log("Textbox", textBox.textContent);
-	    // txt = textBox.textContent;
-	    
+	    textBox.style.display = "none";	    
 	    
 	    //(6)Create a div element for container.
 	    var container = document.createElement("div");
@@ -90,15 +94,21 @@ angular.module('bucketList').service('mapService', function($http) {
 	      	method: 'PUT',
 	      	url: 'http://localhost:9001/map/' + marker._id,
 	      	data: {description: marker.html},
+	      }).then(function(res) {
+	      	cb();
 	      });
 	    })
 
 	    //delete marker
 	    google.maps.event.addDomListener(deleteBtn, "click", function() {
+	    	var x = marker._id;
 	    	marker.setMap(null);
 	    	return $http({
 	    		method: 'DELETE',
-	      	url: 'http://localhost:9001/map/' + marker._id,
+	      	url: 'http://localhost:9001/map/' + x,
+	    	}).then(function(res) {
+	    		cb();
+
 	    	})
 	    })
 	    
@@ -118,25 +128,24 @@ angular.module('bucketList').service('mapService', function($http) {
      	marker.addListener('click', function() {
       	infoWnd.open(map, marker);
     	});
-    });
-  	google.maps.event.addDomListener(window, "load", initialize);
+    // });
+
+  	// google.maps.event.addDomListener(window, "load", initialize);
+  	return marker;
   };
 
   
-  this.clickAddBucket = function (options) {
+  this.clickAddBucket = function (options, cb) {
 
   	return google.maps.event.addListener(map, "click", function(e) {
-  		// console.log(e.latLng);
 	  	//(2) Create a marker normally.
 	    //Marker class accepts any properties even if it's not related with Marker.
 	    var marker = new google.maps.Marker({
-	    	position: options.coordinates || e.latLng,
+	    	position: e.latLng,
 		    map: map,
 		    icon: '../corbeille_vide.png',
 		    flag: true,
 		  });
-
-		
 	    
 	    //(3)Set a flag property which stands for the editing mode.
 	    marker.set("editing", false);
@@ -192,7 +201,6 @@ angular.module('bucketList').service('mapService', function($http) {
 	      		method: 'GET',
 	      		url: 'http://localhost:9001/map',
 	      	}).then(function(res) {
-	      		console.log(res.data);
 	      		var ident = res.data[res.data.length-1];
 	      		return marker._id = ident._id;
 	      	})
@@ -207,14 +215,19 @@ angular.module('bucketList').service('mapService', function($http) {
 	      	method: 'PUT',
 	      	url: 'http://localhost:9001/map/' + marker._id,
 	      	data: {description: marker.html},
+	      }).then(function(res) {
+	      	cb();
 	      });
 	    })
 
 	    google.maps.event.addDomListener(deleteBtn, "click", function() {
+	    	var x = marker._id;
 	    	marker.setMap(null);
 	    	return $http({
 	    		method: 'DELETE',
-	      	url: 'http://localhost:9001/map/' + marker._id,
+	      	url: 'http://localhost:9001/map/' + x,
+	    	}).then(function(res) {
+	    		cb();	    		
 	    	})
 	    })
 	    
@@ -235,17 +248,22 @@ angular.module('bucketList').service('mapService', function($http) {
       	infoWnd.open(map, marker);
     	});
 
-    	console.log("marker created", marker);
     	var lat = marker.getPosition().lat();
 	    var lng = marker.getPosition().lng();
-	    return $http({
+
+			return $http({
       	method: 'POST',
       	url: 'http://localhost:9001/map',
       	data: {
       		description: options.description,
-      		coordinates: {lat: lat, lng: lng}
+      		coordinates: {lat: lat, lng: lng},
       	},
+      }).then(function(res) {
+	      	console.log("marker created", res.data);
+      	cb();
       });
+
+	    
     });
   	google.maps.event.addDomListener(window, "load", initialize);
   };

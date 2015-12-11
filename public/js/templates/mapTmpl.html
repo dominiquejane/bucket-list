@@ -1,3 +1,13 @@
 <h2>BucketMap</h2>
 
+
 <div id="map"></div> 
+
+<div id="maplist-container">
+	<ul id="maplist">
+		<li ng-repeat="bucket in buckets" class="listings">
+			<div>Location: {{bucket.location.$$state.value}}</div>
+			<div>Description: {{bucket.description}}</div>
+		</li>
+	</ul>
+</div>
