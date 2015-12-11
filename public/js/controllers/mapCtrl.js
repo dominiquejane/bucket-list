@@ -1,7 +1,5 @@
 angular.module('bucketList').controller('mapCtrl', function($scope, mapService, $state) {
 
-
-
 	$scope.getLocations = function (marker) {
 		marker.location = mapService.getLocations(marker);
 		return marker;

@@ -24,120 +24,117 @@ angular.module('bucketList').service('mapService', function($http) {
 		}).then(function(res){
 			var loc = res.data.results[res.data.results.length-2 || 0].formatted_address;
 			return loc;
-		})
-	}
+		});
+	};
 
 	this.populateBuckets = function (options, cb) {
-	    var marker = new google.maps.Marker({
-	    	position: options.coordinates,
-		    map: map,
-		    icon: '../corbeille_vide.png',
-		    _id: options._id,
-		    description: options.description,
-		    flag: false,
-		  });
-	    
-	    //(3)Set a flag property which stands for the editing mode.
-	    marker.set("editing", false);
-	    
-	    //(4)Create a div element to display the HTML strings.
-	    var htmlBox = document.createElement("div");
-	    htmlBox.innerHTML =  marker.description || "";
-	    htmlBox.style.width = "200px";
-	    htmlBox.style.height = "50px";
-	    
-	    //(5)Create a textarea for edit the HTML strings.
-	    var textBox = document.createElement("input");
-	    textBox.id = "text";
-	    textBox.textContent = marker.description || "";
-	    textBox.style.width = "200px";
-	    textBox.style.height = "50px";
-	    textBox.style.display = "none";	    
-	    
-	    //(6)Create a div element for container.
-	    var container = document.createElement("div");
-	    container.style.position = "relative";
-	    container.appendChild(htmlBox);
-	    container.appendChild(textBox);
-	    
-	    //(7)Create a button to switch the edit mode
-	    var editBtn = document.createElement("button");
-	    editBtn.innerText = "Edit";
-	    container.appendChild(editBtn);
+	  var marker = new google.maps.Marker({
+	  	position: options.coordinates,
+	    map: map,
+	    icon: '../corbeille_vide.png',
+	    _id: options._id,
+	    description: options.description,
+	    flag: false,
+	  });
+	  
+	  //(3)Set a flag property which stands for the editing mode.
+	  marker.set("editing", false);
+	  
+	  //(4)Create a div element to display the HTML strings.
+	  var htmlBox = document.createElement("div");
+	  htmlBox.innerHTML =  marker.description || "";
+	  htmlBox.style.width = "200px";
+	  htmlBox.style.height = "50px";
+	  
+	  //(5)Create a textarea for edit the HTML strings.
+	  var textBox = document.createElement("input");
+	  textBox.id = "text";
+	  textBox.textContent = marker.description || "";
+	  textBox.style.width = "200px";
+	  textBox.style.height = "50px";
+	  textBox.style.display = "none";	    
+	  
+	  //(6)Create a div element for container.
+	  var container = document.createElement("div");
+	  container.style.position = "relative";
+	  container.appendChild(htmlBox);
+	  container.appendChild(textBox);
+	  
+	  //(7)Create a button to switch the edit mode
+	  var editBtn = document.createElement("button");
+	  editBtn.innerText = "Edit";
+	  container.appendChild(editBtn);
 
-	    //create a save button
-	    var saveBtn = document.createElement("button");
-	    saveBtn.innerText = "Save";
-	    container.appendChild(saveBtn);
+	  //create a save button
+	  var saveBtn = document.createElement("button");
+	  saveBtn.innerText = "Save";
+	  container.appendChild(saveBtn);
 
-	    //Create a button to delete a bucket
-	    var deleteBtn = document.createElement("button");
-	    deleteBtn.innerText="Delete";
-	    container.appendChild(deleteBtn);
-	    
-	    //(8)Create an info window
-	    var infoWnd = new google.maps.InfoWindow({
-	      content : container
+	  //Create a button to delete a bucket
+	  var deleteBtn = document.createElement("button");
+	  deleteBtn.innerText="Delete";
+	  container.appendChild(deleteBtn);
+	  
+	  //(8)Create an info window
+	  var infoWnd = new google.maps.InfoWindow({
+	    content : container
+	  });
+
+	  //(10)Switch the mode. Since Boolean type for editing property,
+	  //the value can be change just negation.
+	  google.maps.event.addDomListener(editBtn, "click", function() {
+	    marker.set("editing", !marker.editing);
+
+	  });
+
+	  //update marker
+	  google.maps.event.addDomListener(saveBtn, "click", function () {
+	  	marker.set("editing", false);
+	  	return $http({
+	    	method: 'PUT',
+	    	url: 'http://localhost:9001/map/' + marker._id,
+	    	data: {description: marker.html},
+	    }).then(function(res) {
+	    	cb();
 	    });
+	  })
 
-	    //(10)Switch the mode. Since Boolean type for editing property,
-	    //the value can be change just negation.
-	    google.maps.event.addDomListener(editBtn, "click", function() {
-	      marker.set("editing", !marker.editing);
+	  //delete marker
+	  google.maps.event.addDomListener(deleteBtn, "click", function() {
+	  	var x = marker._id;
+	  	marker.setMap(null);
+	  	return $http({
+	  		method: 'DELETE',
+	    	url: 'http://localhost:9001/map/' + x,
+	  	}).then(function(res) {
+	  		cb();
 
-	    });
+	  	})
+	  })
+	  
+	  //(11)A (property)_changed event occur when the property is changed.
+	  google.maps.event.addListener(marker, "editing_changed", function(){
+	    textBox.style.display = this.editing ? "block" : "none";
+	    htmlBox.style.display = this.editing ? "none" : "block";
+	  });
+	  
+	  //(12)A change DOM event occur when the textarea is changed, then set the value into htmlBox.
+	  google.maps.event.addDomListener(textBox, "change", function(){
+	    htmlBox.innerHTML = textBox.value;
+	    marker.set("html", textBox.value);
+	  });
+	  
+	  //(9)The info window appear when the marker is clicked.
+	 	marker.addListener('click', function() {
+	  	infoWnd.open(map, marker);
+		});
+		return marker;
+	};
 
-	    //update marker
-	    google.maps.event.addDomListener(saveBtn, "click", function () {
-	    	marker.set("editing", false);
-	    	return $http({
-	      	method: 'PUT',
-	      	url: 'http://localhost:9001/map/' + marker._id,
-	      	data: {description: marker.html},
-	      }).then(function(res) {
-	      	cb();
-	      });
-	    })
 
-	    //delete marker
-	    google.maps.event.addDomListener(deleteBtn, "click", function() {
-	    	var x = marker._id;
-	    	marker.setMap(null);
-	    	return $http({
-	    		method: 'DELETE',
-	      	url: 'http://localhost:9001/map/' + x,
-	    	}).then(function(res) {
-	    		cb();
+	this.clickAddBucket = function (options, cb) {
 
-	    	})
-	    })
-	    
-	    //(11)A (property)_changed event occur when the property is changed.
-	    google.maps.event.addListener(marker, "editing_changed", function(){
-	      textBox.style.display = this.editing ? "block" : "none";
-	      htmlBox.style.display = this.editing ? "none" : "block";
-	    });
-	    
-	    //(12)A change DOM event occur when the textarea is changed, then set the value into htmlBox.
-	    google.maps.event.addDomListener(textBox, "change", function(){
-	      htmlBox.innerHTML = textBox.value;
-	      marker.set("html", textBox.value);
-	    });
-	    
-	    //(9)The info window appear when the marker is clicked.
-     	marker.addListener('click', function() {
-      	infoWnd.open(map, marker);
-    	});
-    // });
-
-  	// google.maps.event.addDomListener(window, "load", initialize);
-  	return marker;
-  };
-
-  
-  this.clickAddBucket = function (options, cb) {
-
-  	return google.maps.event.addListener(map, "click", function(e) {
+		return google.maps.event.addListener(map, "click", function(e) {
 	  	//(2) Create a marker normally.
 	    //Marker class accepts any properties even if it's not related with Marker.
 	    var marker = new google.maps.Marker({
@@ -205,7 +202,7 @@ angular.module('bucketList').service('mapService', function($http) {
 	      		return marker._id = ident._id;
 	      	})
 	      };
-      	
+	    	
 	    });
 
 	    //save marker
@@ -244,29 +241,29 @@ angular.module('bucketList').service('mapService', function($http) {
 	    });
 	    
 	    //(9)The info window appear when the marker is clicked.
-     	marker.addListener('click', function() {
-      	infoWnd.open(map, marker);
-    	});
+	   	marker.addListener('click', function() {
+	    	infoWnd.open(map, marker);
+	  	});
 
-    	var lat = marker.getPosition().lat();
+	  	var lat = marker.getPosition().lat();
 	    var lng = marker.getPosition().lng();
 
 			return $http({
-      	method: 'POST',
-      	url: 'http://localhost:9001/map',
-      	data: {
-      		description: options.description,
-      		coordinates: {lat: lat, lng: lng},
-      	},
-      }).then(function(res) {
+	    	method: 'POST',
+	    	url: 'http://localhost:9001/map',
+	    	data: {
+	    		description: options.description,
+	    		coordinates: {lat: lat, lng: lng},
+	    	},
+	    }).then(function(res) {
 	      	console.log("marker created", res.data);
-      	cb();
-      });
+	    	cb();
+	    });
 
 	    
-    });
-  	google.maps.event.addDomListener(window, "load", initialize);
-  };
+	  });
+		google.maps.event.addDomListener(window, "load", initialize);
+	};
 	
 
 })
