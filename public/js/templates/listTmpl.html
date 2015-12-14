@@ -1,0 +1,48 @@
+<div>
+	<h2>Add to your BucketList</h2>
+	<form ng-submit="createItem(newItem)">
+		<input type="text" ng-model="newItem">
+		<button type="submit">Save</button>
+	</form>
+</div>
+
+
+<div>
+	<h2>Current List</h2>
+
+	<div>
+		<ul>
+			<li ng-repeat="item in items"> 
+				<div ng-show="!item.editing">{{item.description}}</div>
+				<div><input type="text" ng-model="change"  ng-show="item.editing"></div>
+				<button ng-click="editItem(item)" ng-show="!item.editing">Edit</button>
+				<button ng-click="saveItem(item, change)" ng-show="item.editing">Save</button>
+				<button ng-click="cancel(item)" ng-show="item.editing">Cancel</button>
+				<button ng-click="deleteItem(item)">Delete</button>
+			</li>
+		</ul>
+	</div>
+
+</div>
+
+<div ng-model="searchBox">
+	
+</div>
+
+<!-- 
+<div>
+	<h2>Map List</h2>
+
+	<div>
+		<ul>
+			<li ng-repeat="bucket in buckets" class="listings">
+				<div>Location: {{bucket.location.$$state.value}}</div>
+				<div>Description: {{bucket.description}}</div>
+				<button ng-model="edit">Edit</button>
+				<button ng-model="delete">Delete</button>
+			</li>
+		</ul>
+	</div>
+
+</div>
+ -->

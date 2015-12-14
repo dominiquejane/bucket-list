@@ -11,7 +11,7 @@ angular.module('bucketList').controller('mainCtrl', function ($scope, mainServic
 
 	$scope.clickAddBucket();
 
-
+ 
 
 
 // 	// var infoWindow = new google.maps.InfoWindow();

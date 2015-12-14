@@ -4,9 +4,9 @@ var app = angular.module('bucketList', ['ui.router']).config(function($stateProv
 
 	$stateProvider
 		.state('home', {
-			url: '/',
-			templateUrl: 'js/templates/currentTmpl.html',
-			controller: 'currentCtrl'
+			url: '/home',
+			templateUrl: 'js/templates/listTmpl.html',
+			controller: 'listCtrl'
 		})
 		.state('map', {
 			url: '/map',

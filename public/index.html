@@ -15,14 +15,12 @@
 
 
 <body ng-app="bucketList" ng-controller="mainCtrl">
-	testing
 
-<!-- <form ng-submit="geocoder()"> need to create function
-	<input id="pac-input" class="controls" type="text" placeholder="Search Box" ng-model="inputLocation">
-	<button id="add-pac-input">Add to Bucket</button>
-</form> -->
+<!-- <a ui-sref="map" ng-click="initMap()">Map</a>
+<a ui-sref="home" ng-click="getList()">Home</a> -->
+<a ui-sref="map">Map</a>
+<a ui-sref="home">Home</a>
 
-<a ui-sref="map" ng-click="initMap()">map</a>
 
 <div ui-view></div>
 
@@ -42,8 +40,8 @@
 	<script src="js/services/mainService.js"></script>
 	<script src="js/controllers/mapCtrl.js"></script>
 	<script src="js/services/mapService.js"></script>
-	<script src="js/controllers/currentCtrl.js"></script>
-	<script src="js/services/currentService.js"></script>
+	<script src="js/controllers/listCtrl.js"></script>
+	<script src="js/services/listService.js"></script>
 	<script src="js/controllers/completedCtrl.js"></script>
 	<script src="js/services/completedService.js"></script>
 	<script src=""></script>

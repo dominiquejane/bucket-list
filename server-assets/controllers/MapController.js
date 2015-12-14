@@ -32,7 +32,5 @@ module.exports = {
 		})
 	}
 
-
-
 };
 
