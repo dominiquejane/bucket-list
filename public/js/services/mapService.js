@@ -7,13 +7,14 @@ angular.module('bucketList').service('mapService', function($http) {
 		})
 	};
 
-	var map = new google.maps.Map(document.getElementById('map'), {
+	var map; 
+	
+	this.initMap = function() {
+		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 2,
 			center: new google.maps.LatLng(30, 0),
 			mapTypeId: google.maps.MapTypeId.ROAD
 		});
-
-	this.initMap = function() {
 		return map;
 	};
 

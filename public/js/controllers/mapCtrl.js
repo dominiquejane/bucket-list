@@ -32,19 +32,24 @@ angular.module('bucketList').controller('mapCtrl', function($scope, mapService, 
 	};
 	$scope.getBuckets();
 
-	$scope.getSearchBox = function () {
+	
+
+
+	$scope.initMap = function () { 
+		
+		if(!$scope.map){
+			console.log("getting map");
+			$scope.map = mapService.initMap();
+
+		};
+				console.log($scope.map);
+	};
+	$scope.initMap();
+$scope.getSearchBox = function () {
 		// mapService.getSearchBox($scope.getBuckets);
 		mapService.getSearchBox();
 	};
 	$scope.getSearchBox();
-
-
-	$scope.initMap = function () { 
-		console.log("getting map");
-		$scope.map = mapService.initMap();
-	};
-	$scope.initMap();
-
 	$scope.clickAddBucket = function () {
 		mapService.clickAddBucket({description: "Enter BucketList Item"}, $scope.refreshMap);
 	};
