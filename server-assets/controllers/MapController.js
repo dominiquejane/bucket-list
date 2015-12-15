@@ -13,7 +13,7 @@ module.exports = {
 		})
 	},
 	getBuckets : function (req, res) {
-		MapSchema.find().exec()
+		MapSchema.find({status: "current"}).exec()
 		.then(function(buckets) {
 			return res.json(buckets);
 		})
@@ -28,6 +28,13 @@ module.exports = {
 	deleteBucket : function (req, res) {
 		MapSchema.remove({_id: req.params.id}, req.body)
 		.then(function(result) {
+			return res.status(200).end();
+		})
+	},
+	completeBucket : function (req, res) {
+		MapSchema.update({_id: req.params.id}, req.body)
+		.then(function(result) {
+			console.log(result);
 			return res.status(200).end();
 		})
 	}

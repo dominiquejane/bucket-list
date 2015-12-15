@@ -6,7 +6,11 @@ angular.module('bucketList').controller('listCtrl', function($scope, listService
 		$scope.items = [];
 		listService.getItems().then(function(res) {
 			for (var i = 0; i < res.data.length; i++) {
-				$scope.items.push(res.data[i]);
+				// if(res.data[i].status === "current"){
+				// 	$scope.items.push(res.data[i]);
+				// }
+					$scope.items.push(res.data[i]);
+
 			}
 		})
 		return $scope.Items;
@@ -16,7 +20,11 @@ angular.module('bucketList').controller('listCtrl', function($scope, listService
 		$scope.items = [];
 		listService.getItems().then(function(res) {
 			for (var i = 0; i < res.data.length; i++) {
-				$scope.items.push(res.data[i]);
+				// if(res.data[i].status === "current"){
+				// 	$scope.items.push(res.data[i]);
+				// }
+					$scope.items.push(res.data[i]);
+				
 			}
 				console.log("List created", res);
 
@@ -55,10 +63,11 @@ angular.module('bucketList').controller('listCtrl', function($scope, listService
 		})
 	};
 
-	// $scope.getSearchBox = function() {
-	// 	$scope.searchBox = listService.getSearchBox();
-	// }
-	// $scope.getSearchBox();
+	$scope.completeItem = function (item) {
+		listService.completeItem(item).then(function(res) {
+			$scope.refreshList();
+		})
+	}
 
 });
 

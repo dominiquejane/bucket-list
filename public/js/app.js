@@ -5,8 +5,8 @@ var app = angular.module('bucketList', ['ui.router']).config(function($stateProv
 	$stateProvider
 		.state('home', {
 			url: '/home',
-			templateUrl: 'js/templates/listTmpl.html',
-			controller: 'listCtrl'
+			templateUrl: 'js/templates/listTmplcopy.html',
+			controller: 'listCtrlcopy'
 		})
 		.state('map', {
 			url: '/map',
@@ -14,9 +14,9 @@ var app = angular.module('bucketList', ['ui.router']).config(function($stateProv
 			controller: 'mapCtrl'
 		})
 		.state('completed', {
-			url: '/completed-list',
+			url: '/completed',
 			templateUrl: 'js/templates/completedTmpl.html',
-			contoller: 'completedCtrl'
+			controller: 'completedCtrl'
 		});
 
 });

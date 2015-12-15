@@ -28,7 +28,7 @@ angular.module('bucketList').service('mapService', function($http) {
 		});
 	};
 
-	this.populateBuckets = function (options, cb) {
+	this.populateBuckets = function (options, cb, completed) {
 	  var marker = new google.maps.Marker({
 	  	position: options.coordinates,
 	    map: map,
@@ -75,6 +75,10 @@ angular.module('bucketList').service('mapService', function($http) {
 	  var deleteBtn = document.createElement("button");
 	  deleteBtn.innerText="Delete";
 	  container.appendChild(deleteBtn);
+
+	  var completedBtn = document.createElement("button");
+	  completedBtn.innerText="Completed";
+	  container.appendChild(completedBtn);
 	  
 	  //(8)Create an info window
 	  var infoWnd = new google.maps.InfoWindow({
@@ -109,7 +113,19 @@ angular.module('bucketList').service('mapService', function($http) {
 	    	url: 'http://localhost:9001/map/' + x,
 	  	}).then(function(res) {
 	  		cb();
+	  	})
+	  })
 
+	  google.maps.event.addDomListener(completedBtn, "click", function() {
+	  	var x = marker._id;
+	  	marker.setMap(null);
+	  	return $http({
+	  		method: 'PUT',
+	  		url: 'http://localhost:9001/map/' + x,
+	  		data: {status: "completed"}
+	  	}).then(function(res) {
+	  		console.log("click completed");
+	  		completed();
 	  	})
 	  })
 	  
@@ -133,7 +149,7 @@ angular.module('bucketList').service('mapService', function($http) {
 	};
 
 
-	this.clickAddBucket = function (options, cb) {
+	this.clickAddBucket = function (options, cb, completed) {
 
 		return google.maps.event.addListener(map, "click", function(e) {
 	  	//(2) Create a marker normally.
@@ -181,6 +197,10 @@ angular.module('bucketList').service('mapService', function($http) {
 	    var deleteBtn = document.createElement("button");
 	    deleteBtn.innerText="Delete";
 	    container.appendChild(deleteBtn);
+
+	    var completedBtn = document.createElement("button");
+	    completedBtn.innerText = "Completed";
+	    container.appendChild(completedBtn);
 	    
 	    //(8)Create an info window
 	    var infoWnd = new google.maps.InfoWindow({
@@ -229,10 +249,29 @@ angular.module('bucketList').service('mapService', function($http) {
 			    		method: 'DELETE',
 			      	url: 'http://localhost:9001/map/' + x,
 			    	}).then(function(res) {
-			    		cb();	    		
+			    		completed();	    		
 			    	})
-	      }});
-	    
+	      }
+	    });
+
+	    google.maps.event.addDomListener(completedBtn, "click", function() {
+		  	if(marker.flag === true){
+		  		alert("Edit and save bucket before completing.")
+		  	}
+		  	else {
+			  	var x = marker._id;
+	  			marker.setMap(null);
+	  			return $http({
+			  		method: 'PUT',
+			  		url: 'http://localhost:9001/map/' + x,
+			  		data: {status: "completed"}
+			  	}).then(function(res) {
+			  		console.log("clicked completed")
+			  		completed();
+			  	})
+		  	} 	
+		  })
+
 	    //(11)A (property)_changed event occur when the property is changed.
 	    google.maps.event.addListener(marker, "editing_changed", function(){
 	      textBox.style.display = this.editing ? "block" : "none";

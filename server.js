@@ -8,7 +8,8 @@ var express = require('express'),
 	MapController = require('./server-assets/controllers/MapController'),
 	MapSchema = require('./server-assets/models/MapSchema'),
 	ListSchema = require('./server-assets/models/ListSchema'),
-	ListController = require('./server-assets/controllers/ListController');
+	ListController = require('./server-assets/controllers/ListController'),
+	CompletedController = require('./server-assets/controllers/CompletedController');
 
 // mongoose.Promise = require('q').Promise;
 
@@ -21,15 +22,28 @@ app.get('/', function (res, req) {
 	.get('/map', MapController.getBuckets)
 	.post('/map', MapController.createBucket)
 	.put('/map/:id', MapController.editBucket)
+	.put('/map/:id', MapController.completeBucket)
 	.delete('/map/:id', MapController.deleteBucket)
-	// .get('/home/list', MapController.getBuckets)
-	// .post('/home/list', MapController.createBucket)
-	// .put('/home/list/:id', MapController.editBucket)
-	// .delete('/home/list/:id', MapController.deleteBucket)
+
 	.get('/home', ListController.getItems)
 	.post('/home', ListController.createItem)
 	.put('/home/:id', ListController.editItem)
-	.delete('/home/:id', ListController.deleteItem);
+	.put('/home/:id', ListController.completeItem)
+	.delete('/home/:id', ListController.deleteItem)
+
+	.get('/completed', CompletedController.getBuckets)
+	.get('/completed', CompletedController.getItems);
+	// .put('/completed/:id', CompletedController.editItem);
+	// .delete('/completed/:id', CompletedController.deleteItem)
+
+//work off the status: if the status is current then allow it to be shown on map and current, 
+//make two api calls to the map and current data and if the status matches completed then list it on completed page
+
+
+//edit services/ctrls for filtering for 'current'
+//edit services/ctrls: add completed buttons that call the completed functions
+//create CompletedController and respective endpoints (Things I've done... Places I've been...)
+//create completed ctrl/service/tmpl
 
 
 app.listen(port, function() {

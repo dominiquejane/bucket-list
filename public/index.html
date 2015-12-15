@@ -6,8 +6,7 @@
 	<link rel="stylesheet" href="styles.css" type="text/css">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.1/angular.js"></script>
-	<!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
-	 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2pfXaIHGrYslOaI9UrAHhVDssr4PNvTo&libraries=places"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2pfXaIHGrYslOaI9UrAHhVDssr4PNvTo&libraries=places"></script>
   
 
 </head>
@@ -16,11 +15,9 @@
 
 <body ng-app="bucketList" ng-controller="mainCtrl">
 
-<!-- <a ui-sref="map" ng-click="initMap()">Map</a>
-<a ui-sref="home" ng-click="getList()">Home</a> -->
-<a ui-sref="map">Map</a>
 <a ui-sref="home">Home</a>
-
+<a ui-sref="map">Map</a>
+<a ui-sref="completed">Completed</a>
 
 <div ui-view></div>
 
@@ -44,11 +41,6 @@
 	<script src="js/services/listService.js"></script>
 	<script src="js/controllers/completedCtrl.js"></script>
 	<script src="js/services/completedService.js"></script>
-	<script src=""></script>
-	<script src=""></script>
-	<script src=""></script>
-	<script src=""></script>
-
 
 </body>
 </html>

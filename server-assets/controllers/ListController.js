@@ -13,7 +13,7 @@ module.exports = {
 		})
 	},
 	getItems : function (req, res) {
-		ListSchema.find().exec()
+		ListSchema.find({status: "current"}).exec()
 		.then(function(items) {
 			return res.json(items);
 		})
@@ -28,6 +28,13 @@ module.exports = {
 	deleteItem : function (req, res) {
 		ListSchema.remove({_id: req.params.id}, req.body)
 		.then(function(result) {
+			return res.status(200).end();
+		})
+	},
+	completeItem : function (req, res) {
+		ListSchema.update({_id: req.params.id}, req.body)
+		.then(function(result) {
+			console.log(result);
 			return res.status(200).end();
 		})
 	}

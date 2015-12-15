@@ -34,9 +34,14 @@ angular.module('bucketList').service('listService', function ($http) {
 		})
 	};
 
-	this.getSearchBox = function () {
-		
-
+	this.completeItem = function (item) {
+		return $http({
+			method: 'PUT',
+			url: 'http://localhost:9001/home/' + item._id,
+			data: {
+				status: "completed",
+			}
+		})
 	}
 
 
