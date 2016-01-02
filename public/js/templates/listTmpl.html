@@ -1,3 +1,10 @@
+<div>	
+		<a ui-sref="auth.home">BucketList</a>
+		<a ui-sref="auth.map">BucketMap</a>
+		<a ui-sref="auth.completed">Before kicking the bucket...</a>
+		<a ui-sref="logout">Logout</a>
+</div>	
+
 <div>
 	<h2>Add to your BucketList</h2>
 	<form ng-submit="createItem(newItem)">
@@ -29,21 +36,3 @@
 <div ng-model="searchBox">
 	
 </div>
-
-<!-- 
-<div>
-	<h2>Map List</h2>
-
-	<div>
-		<ul>
-			<li ng-repeat="bucket in buckets" class="listings">
-				<div>Location: {{bucket.location.$$state.value}}</div>
-				<div>Description: {{bucket.description}}</div>
-				<button ng-model="edit">Edit</button>
-				<button ng-model="delete">Delete</button>
-			</li>
-		</ul>
-	</div>
-
-</div>
- -->

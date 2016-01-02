@@ -1,0 +1,32 @@
+
+<div class="container">
+
+<div class="col-sm-6 col-sm-offset-3">
+
+    <h1><span class="fa fa-sign-in"></span> Login</h1>
+    <h4 class="text-muted">No account? <a ui-sref="signup">Signup</a> instead</h4>
+
+    <!-- show any messages that come back with authentication -->
+   <!--  <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+    <% } %> -->
+
+    <!-- LOGIN FORM -->
+    <form ng-submit='login()'>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" id="username" placeholder="Enter Username" ng-model="username">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter password" ng-model="password">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Login</button>
+    </form>
+
+    <hr>
+
+</div>
+
+</div>

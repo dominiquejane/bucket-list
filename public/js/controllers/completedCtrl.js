@@ -1,50 +1,29 @@
-angular.module('bucketList').controller('completedCtrl', function ($scope, completedService) {
+angular.module('bucketList').controller('completedCtrl', function ($scope, completedService, mapService) {
 
 
 	$scope.buckets = [];
 	$scope.items = [];
 
-	// $scope.getCompleted = function() {
-	// 	completedService.getItems()
-	// 	.then(function(res) {
-	// 		console.log(res);
-	// 		for (var i = 0; i < res.data.length; i++) {
-	// 			if (res.data[i].status === "completed") {
-	// 				$scope.items.push(res.data[i])
-	// 			}
-	// 		}
-	// 	})
-	// 	completedService.getBuckets()
-	// 	.then(function(res) {
-	// 		console.log(res);
-	// 		for (var i = 0; i < res.data.length; i++) {
-	// 			if (res.data[i].status === "completed") {
-	// 				$scope.buckets.push(res.data[i])
-	// 			}
-	// 		}
-	// 	})
-	// 	console.log("items", $scope.items);
-	// 	console.log("buckets", $scope.buckets);
-	// }
+	$scope.getLocations = function (marker) {
+		marker.location = mapService.getLocations(marker);
+		return marker;
+	}
 
 	$scope.getCompleted = function () {
 		console.log("activated");
-		completedService.getItems()
-		// .then(function(res) {
-		// 	var x = res.data;
-		// 	for (var i = 0;i < x.length; i++) {
-		// 		if (x[i].coordinates){
-		// 			$scope.buckets.push(x[i]);
-		// 		} 
-		// 		else {
-		// 			$scope.items.push(x[i]);
-		// 		}
-		// 	}
-		// 	console.log("buckets", $scope.buckets);
-		// 	console.log("items", $scope.items)
-		// })
-	};
+		completedService.getCompleted()
+		.then(function(res) {
+			console.log(res);
+			var b = res.buckets.data;
+			var l = res.items.data;
+			for (var i = 0; i < b.length; i++) {
+				$scope.getLocations(b[i]);
+				$scope.buckets.push(b[i]);
+			}
+			for (var k = 0; k < l.length; k++) {
+				$scope.items.push(l[k]);
+			}
+		})
+	}
 	$scope.getCompleted();
-
-
 });

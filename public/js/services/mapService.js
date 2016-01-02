@@ -3,7 +3,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	this.getBuckets = function () {
 		return $http({
 			method: 'GET',
-			url: 'http://localhost:9001/map'
+			// url: 'http://localhost:9001/map'
+			url: '/api/buckets'
 		})
 	};
 
@@ -97,7 +98,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	  	marker.set("editing", false);
 	  	return $http({
 	    	method: 'PUT',
-	    	url: 'http://localhost:9001/map/' + marker._id,
+	    	// url: 'http://localhost:9001/map/' + marker._id,
+	    	url: '/api/buckets/' + marker._id,
 	    	data: {description: marker.html},
 	    }).then(function(res) {
 	    	cb();
@@ -110,7 +112,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	  	marker.setMap(null);
 	  	return $http({
 	  		method: 'DELETE',
-	    	url: 'http://localhost:9001/map/' + x,
+	    	// url: 'http://localhost:9001/map/' + x,
+	    	url: '/api/buckets/' + x,
 	  	}).then(function(res) {
 	  		cb();
 	  	})
@@ -121,7 +124,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	  	marker.setMap(null);
 	  	return $http({
 	  		method: 'PUT',
-	  		url: 'http://localhost:9001/map/' + x,
+	  		// url: 'http://localhost:9001/map/' + x,
+	    	url: '/api/buckets/' + x,
 	  		data: {status: "completed"}
 	  	}).then(function(res) {
 	  		console.log("click completed");
@@ -217,7 +221,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	      	marker.flag = false;
 	      	return $http({
 	      		method: 'GET',
-	      		url: 'http://localhost:9001/map',
+	      		// url: 'http://localhost:9001/map',
+	    			url: '/api/buckets/',
 	      	}).then(function(res) {
 	      		var ident = res.data[res.data.length-1];
 	      		return marker._id = ident._id;
@@ -231,7 +236,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	    	marker.set("editing", false);
 	    	return $http({
 	      	method: 'PUT',
-	      	url: 'http://localhost:9001/map/' + marker._id,
+	      	// url: 'http://localhost:9001/map/' + marker._id,
+	      	url: '/api/buckets/' + marker._id,
 	      	data: {description: marker.html},
 	      }).then(function(res) {
 	      	cb();
@@ -247,7 +253,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	    		marker.setMap(null);
 	    		return $http({
 			    		method: 'DELETE',
-			      	url: 'http://localhost:9001/map/' + x,
+			      	// url: 'http://localhost:9001/map/' + x,
+			      	url: '/api/buckets/' + x,
 			    	}).then(function(res) {
 			    		completed();	    		
 			    	})
@@ -263,7 +270,8 @@ angular.module('bucketList').service('mapService', function($http) {
 	  			marker.setMap(null);
 	  			return $http({
 			  		method: 'PUT',
-			  		url: 'http://localhost:9001/map/' + x,
+			  		// url: 'http://localhost:9001/map/' + x,
+			  		url: '/api/buckets/' + x,
 			  		data: {status: "completed"}
 			  	}).then(function(res) {
 			  		console.log("clicked completed")
@@ -294,7 +302,8 @@ angular.module('bucketList').service('mapService', function($http) {
 
 			return $http({
 	    	method: 'POST',
-	    	url: 'http://localhost:9001/map',
+	    	// url: 'http://localhost:9001/map',
+	    	url: '/api/buckets/',
 	    	data: {
 	    		description: options.description,
 	    		coordinates: {lat: lat, lng: lng},
