@@ -12,7 +12,7 @@ var express = require('express'),
 	ListSchema = require('./server-assets/models/ListSchema'),
 	ListController = require('./server-assets/controllers/ListController'),
 	CompletedController = require('./server-assets/controllers/CompletedController'),
-	User = require('./server-assets/models/user');
+	User = require('./server-assets/models/user.js');
 
 // configuration ===============================================================
 
