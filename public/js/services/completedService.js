@@ -1,20 +1,5 @@
 angular.module('bucketList').service('completedService', function ($http, $q){
 
-	// this.getItems = function () {
-	// 	return $http({
-	// 		method: 'GET',
-	// 		url: 'http://localhost:9001/home'
-	// 	})
-	// };
-
-	// this.getBuckets = function () {
-	// 	return $http({
-	// 		method: 'GET',
-	// 		url: 'http://localhost:9001/map'
-	// 	})
-	// };
-	
-
 	this.getCompleted = function () {
     var dfd = $q.defer()
 

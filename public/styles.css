@@ -2,11 +2,52 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+}
 
+body {
+	background: url(http://www.homecrafts.co.uk/prodimg/B035I_1_Zoom.jpg) no-repeat center center fixed ;
+	background-size: cover;
+}
+
+li {
+	list-style: none;
+	font-size: 20px;
+}
+
+.background {
+	background-color: rgba(255, 253, 229, 0.65);
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #map {
 	height: 500px;
 	width: 1000px;
+	margin-left:auto;
+	margin-right: auto;
 }
+
+#add-list {
+	position: relative;
+	display: inline-block;
+}
+
+.maplist {
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.listings {
+	margin: 10px;
+	/*border: 1px solid grey;*/
+	border-radius: 10px;
+	padding: 5px;
+	font-size:20px;
+}
+
+.security {
+	margin-top:5%;
+}
+
 

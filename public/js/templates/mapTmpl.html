@@ -1,25 +1,28 @@
-<div>	
-		<a ui-sref="auth.home">BucketList</a>
-		<a ui-sref="auth.map">BucketMap</a>
-		<a ui-sref="auth.completed">Before kicking the bucket...</a>
-		<a ui-sref="logout">Logout</a>
-</div>
-
-<h2>BucketMap</h2>
-
-<div>
-	<input type="text" id="pac-input" placeholder="Search"/>
-	<!-- <button id="add-pac-input">Add Bucket</button> -->
-</div>
-
-
-<div id="map"></div> 
-
-<div id="maplist-container">
-	<ul id="maplist">
-		<li ng-repeat="bucket in buckets" class="listings">
-			<div>Location: {{bucket.location.$$state.value}}</div>
-			<div>Description: {{bucket.description}}</div>
-		</li>
+<div class="background container">
+	<h1>BucketMap</h1>
+	<ul class="tabs left">
+		<li><a ui-sref="auth.home">BucketList</a></li>
+		<li><a ui-sref="auth.map">BucketMap</a></li>
+		<li><a ui-sref="auth.completed">BucketReport</a></li>
+		<li><a ui-sref="logout">Logout</a></li>
 	</ul>
-</div>
+
+
+	<div>
+		<input type="text" id="pac-input" placeholder="Search"/>
+		<!-- <button id="add-pac-input">Add Bucket</button> -->
+	</div>
+
+
+	<div id="map"></div> 
+
+	<div class="maplist">
+		<ul>
+			<li ng-repeat="bucket in buckets" class="listings">
+				<div>Location: <span style="font-size:22px">{{bucket.location.$$state.value}}</span></div>
+				<div>Description: <span style="font-size:22px">{{bucket.description}}</span></div>
+			</li>
+		</ul>
+	</div>
+</div>	
+	

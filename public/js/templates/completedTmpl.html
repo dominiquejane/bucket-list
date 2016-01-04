@@ -1,35 +1,39 @@
-<div>	
-		<a ui-sref="auth.home">BucketList</a>
-		<a ui-sref="auth.map">BucketMap</a>
-		<a ui-sref="auth.completed">Before kicking the bucket...</a>
-		<a ui-sref="logout">Logout</a>
-</div>
+<div class="container background">
+	<h1>The BucketReport</h1>
+	<ul class="tabs left">
+		<li><a ui-sref="auth.home">BucketList</a></li>
+		<li><a ui-sref="auth.map">BucketMap</a></li>
+		<li><a ui-sref="auth.completed">BucketReport</a></li>
+		<li><a ui-sref="logout">Logout</a></li>
+	</ul>
 
-<h2>Completed Buckets</h2>
-
-<div>
-	<h3>Things I've done...</h3>
 
 	<div>
-		<ul>
-			<li ng-repeat="item in items">
-				{{item.description}}
-			</li>
-		</ul>
-	</div>
-</div>
+		<h3>Things I've done...</h3>
 
-<div>
-	<h3>Places I've been...</h3>
+		<div>
+			<ul>
+				<li ng-repeat="item in items">
+					<span style="font-size:22px">{{item.description}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
 
 	<div>
-		<ul>
-			<li ng-repeat="bucket in buckets">
-				<div>{{bucket.location.$$state.value}}</div>
-				<div>{{bucket.description}}</div>
-			</li>
-		</ul>
+		<h3>Places I've been...</h3>
+
+		<div>
+			<ul>
+				<li ng-repeat="bucket in buckets">
+					<div>Location: <span style="font-size:22px">{{bucket.location.$$state.value}}</span></div>
+					<div>Description: <span style="font-size:22px">{{bucket.description}}</span></div>
+				</li>
+			</ul>
+		</div>
 	</div>
+
 </div>
+	
 
 
