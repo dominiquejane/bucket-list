@@ -115,7 +115,7 @@ app.listen(port, function() {
 	console.log("Listening on port ", port);
 });
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/bucketlist');
+mongoose.connect('mongodb://heroku_xp0cm43g:4es3ve6mk1jhoopcgn2idil7po@ds039165.mongolab.com:39165/heroku_xp0cm43g' || 'mongodb://127.0.0.1:27017/bucketlist');
 mongoose.connection.once('connected', function() {
   console.log('db connected');
 });
